@@ -3,7 +3,7 @@ using System;
 namespace CameraCli.Devices
 {
     [Flags]
-    public enum DeviceConfigurationFlags : uint
+    public enum DeviceConfigurationFlags : uint //SPDRP_CONFIGFLAGS
     {
         CONFIGFLAG_DISABLED = 0x1,
         CONFIGFLAG_REMOVED = 0x2,
