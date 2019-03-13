@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CameraCli.Devices;
+using CameraCli.Native;
 using CameraCli.Utils;
 using McMaster.Extensions.CommandLineUtils;
 

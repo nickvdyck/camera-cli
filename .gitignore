@@ -1,6 +1,7 @@
 # Created artifacts
 ./artifacts
 omnisharp.json
+scripts
 
 # Created by https://www.gitignore.io/api/csharp,windows,visualstudiocode
 

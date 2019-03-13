@@ -1,4 +1,4 @@
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     public enum DeviceCharacteristics : uint
     {

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     internal static class DeviceManager
     {

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     internal struct SP_PROPCHANGE_PARAMS
     {

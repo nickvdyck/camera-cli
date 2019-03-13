@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Camera Tester</title>
+</head>
+
+<body id="app">
+    <video height="480px" width="640px" id="webcamfeed" autoplay></video>
+    <div class="camera__controls">
+        <button id="startwebcam">Start Webcam</button>
+        <button id="stopwebcam">Stop Webcam</button>
+    </div>
+    <style>
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #webcamfeed {
+            border: 1px solid black;
+        }
+
+        .camera__controls {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        const startWebCamBtn = document.getElementById("startwebcam");
+        const stopWebCamBtn = document.getElementById("stopwebcam");
+        const webcamFeed = document.getElementById("webcamfeed");
+
+        const startWebCam = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+            webcamFeed.srcObject = stream;
+        };
+
+        const stopWebCam = () => webcamFeed.srcObject = null;
+
+        startWebCamBtn.addEventListener("click", startWebCam);
+        stopWebCamBtn.addEventListener("click", stopWebCam);
+    </script>
+</body>
+
+</html>

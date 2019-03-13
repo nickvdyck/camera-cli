@@ -1,6 +1,6 @@
 using System;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
 
     internal struct DEVPROPKEY

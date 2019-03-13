@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     public class Device
     {

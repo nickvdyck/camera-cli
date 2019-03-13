@@ -1,6 +1,6 @@
 using System;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     [Flags]
     public enum DeviceCapabilities : uint

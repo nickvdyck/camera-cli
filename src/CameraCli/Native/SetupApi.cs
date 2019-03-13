@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace CameraCli.Devices
+namespace CameraCli.Native
 {
     public static class SetupApi
     {
