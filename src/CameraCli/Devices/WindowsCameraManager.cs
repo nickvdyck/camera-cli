@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CameraCli.Native;
 
@@ -5,6 +6,45 @@ namespace CameraCli.Devices
 {
     public class WindowsCameraManager : ICameraManager
     {
+        public List<Camera> List()
+        {
+            var cameras = new List<Camera>();
+            var devices = DeviceManager.ListDevices().Where(d => d.Service == "usbvideo\0");
+
+            foreach (var device in devices)
+            {
+                cameras.Add(new Camera
+                {
+                    Name = device.Name,
+                    Enabled = device.ConfigurationFlags == 0
+                });
+            }
+
+            return cameras;
+            // var table = devices.ToStringTable(
+            //     new[] { "NAME", "STATUS", "MANUFACTURER", "HANDLE" },
+            //     d => d.Name,
+            //     d =>
+            //     {
+            //         var status = "unknown";
+
+            //         if (d.ConfigurationFlags == 0)
+            //         {
+            //             status = "enabled";
+            //         }
+            //         else if (d.ConfigurationFlags == DeviceConfigurationFlags.CONFIGFLAG_DISABLED)
+            //         {
+            //             status = "disabled";
+            //         }
+
+            //         return status;
+            //     },
+            //     d => d.Manufacturer,
+            //     d => d.PhysicalDeviceObjectName
+            // );
+
+        }
+
         public string UsedBy()
         {
             throw new System.NotImplementedException();

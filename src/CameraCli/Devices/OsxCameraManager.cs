@@ -13,6 +13,34 @@ namespace CameraCli.Devices
         private const string APPLE_CAMERA_FCP = "/Library/CoreMediaIO/Plug-Ins/FCP-DAL/AppleCamera.plugin/Contents/MacOS/AppleCamera";
 
         private readonly List<string> _cameraFDs = new List<string>() { APPLE_CAMERA_DAL, APPLE_CAMERA_FCP };
+
+        public List<Camera> List()
+        {
+            var camera = new Camera()
+            {
+                Name = "FaceTime Camera",
+                Enabled = false,
+            };
+
+            foreach (var cameraFd in _cameraFDs)
+            {
+                Syscall.stat(cameraFd, out var buffer);
+                var current = buffer.st_mode;
+
+                if (
+                    buffer.st_mode.HasFlag(FilePermissions.S_IRUSR) &&
+                    buffer.st_mode.HasFlag(FilePermissions.S_IRGRP) &&
+                    buffer.st_mode.HasFlag(FilePermissions.S_IROTH)
+                )
+                {
+                    camera.Enabled = true;
+                    break;
+                }
+            }
+
+            return new List<Camera> { camera };
+        }
+
         public string UsedBy()
         {
             var process = new Process
@@ -33,7 +61,7 @@ namespace CameraCli.Devices
 
             if (!String.IsNullOrEmpty(error))
             {
-                System.Console.WriteLine($"ERROR: {error}");
+                throw new Exception(error);
             }
 
             process.WaitForExit();
@@ -42,20 +70,6 @@ namespace CameraCli.Devices
 
         public void Enable()
         {
-            //    #define S_IRWXU 0000700    /* RWX mask for owner */
-            //    #define S_IRUSR 0000400    /* R for owner */
-            //    #define S_IWUSR 0000200    /* W for owner */
-            //    #define S_IXUSR 0000100    /* X for owner */
-
-            //    #define S_IRWXG 0000070    /* RWX mask for group */
-            //    #define S_IRGRP 0000040    /* R for group */
-            //    #define S_IWGRP 0000020    /* W for group */
-            //    #define S_IXGRP 0000010    /* X for group */
-            //    #define S_IRWXO 0000007    /* RWX mask for other */
-            //    #define S_IROTH 0000004    /* R for other */
-            //    #define S_IWOTH 0000002    /* W for other */
-            //    #define S_IXOTH 0000001    /* X for other */
-
             foreach (var cameraFd in _cameraFDs)
             {
                 Syscall.stat(cameraFd, out var buffer);
@@ -72,6 +86,10 @@ namespace CameraCli.Devices
                     {
                         throw new UnauthorizedAccessException();
                     }
+                    else
+                    {
+                        throw new Exception(errno.ToString());
+                    }
                 }
             }
         }
@@ -85,10 +103,6 @@ namespace CameraCli.Devices
                 var after = current & ~FilePermissions.S_IRUSR & ~FilePermissions.S_IRGRP & ~FilePermissions.S_IROTH;
 
                 var result = Syscall.chmod(cameraFd, after);
-                System.Console.WriteLine(current);
-                System.Console.WriteLine(after);
-
-                // var result = 0;
 
                 if (result == -1)
                 {
@@ -97,6 +111,10 @@ namespace CameraCli.Devices
                     if (errno == Errno.EPERM)
                     {
                         throw new UnauthorizedAccessException();
+                    }
+                    else
+                    {
+                        throw new Exception(errno.ToString());
                     }
                 }
             }

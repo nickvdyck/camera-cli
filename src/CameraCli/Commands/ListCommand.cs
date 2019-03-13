@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CameraCli.Devices;
 using CameraCli.Native;
 using CameraCli.Utils;
 using McMaster.Extensions.CommandLineUtils;
@@ -10,39 +11,24 @@ namespace CameraCli.Commands
     public class ListCommand
     {
         private readonly IConsole _console;
+        private readonly ICameraManager _cameraManger;
 
-        public ListCommand(IConsole console)
+        public ListCommand(IConsole console, ICameraManager cameraManger)
         {
             _console = console;
+            _cameraManger = cameraManger;
         }
 
         public async Task OnExecuteAsync()
         {
-            var devices = DeviceManager.ListDevices().Where(d => d.Service == "usbvideo\0");
+            var cameras = _cameraManger.List();
 
-            var table = devices.ToStringTable(
-                new[] { "NAME", "STATUS", "MANUFACTURER", "HANDLE" },
+            var table = cameras.ToStringTable(
+                new[] { "NAME", "ENABLED", },
                 d => d.Name,
-                d =>
-                {
-                    var status = "unknown";
-
-                    if (d.ConfigurationFlags == 0)
-                    {
-                        status = "enabled";
-                    }
-                    else if (d.ConfigurationFlags == DeviceConfigurationFlags.CONFIGFLAG_DISABLED)
-                    {
-                        status = "disabled";
-                    }
-
-                    return status;
-                },
-                d => d.Manufacturer,
-                d => d.PhysicalDeviceObjectName
+                d => d.Enabled ? "yes" : "no"
             );
 
-            await _console.Out.WriteLineAsync("");
             await _console.Out.WriteLineAsync(table);
         }
     }
