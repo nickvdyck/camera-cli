@@ -24,9 +24,11 @@ namespace CameraCli.Commands
             var cameras = _cameraManger.List();
 
             var table = cameras.ToStringTable(
-                new[] { "NAME", "ENABLED", },
+                new[] { "NAME", "ENABLED", "MANUFACTURER", "HANDLE"},
                 d => d.Name,
-                d => d.Enabled ? "yes" : "no"
+                d => d.Enabled ? "yes" : "no",
+                d => d.Manufacturer,
+                d => d.Handle
             );
 
             await _console.Out.WriteLineAsync(table);

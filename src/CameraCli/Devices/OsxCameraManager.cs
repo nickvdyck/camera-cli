@@ -20,6 +20,7 @@ namespace CameraCli.Devices
             {
                 Name = "FaceTime Camera",
                 Enabled = false,
+                Manufacturer = "Apple"
             };
 
             foreach (var cameraFd in _cameraFDs)

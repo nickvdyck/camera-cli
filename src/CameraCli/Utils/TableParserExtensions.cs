@@ -44,7 +44,7 @@ namespace CameraCli.Utils
         public static string ToStringTable(this string[,] arrValues)
         {
             int[] maxColumnsWidth = GetMaxColumnsWidth(arrValues);
-            var headerSpliter = new string('-', maxColumnsWidth.Sum(i => i + 3) - 1);
+            var headerSplitter = new string('-', maxColumnsWidth.Sum(i => i + 3) - 1);
 
             var sb = new StringBuilder();
             for (int rowIndex = 0; rowIndex < arrValues.GetLength(0); rowIndex++)
@@ -65,7 +65,7 @@ namespace CameraCli.Utils
                 // Print splitter
                 if (rowIndex == 0)
                 {
-                    sb.AppendFormat(" |{0}| ", headerSpliter);
+                    sb.AppendFormat(" |{0}| ", headerSplitter);
                     sb.AppendLine();
                 }
             }
@@ -100,19 +100,19 @@ namespace CameraCli.Utils
             return ToStringTable(values, headers, selectors);
         }
 
-        private static PropertyInfo GetProperty<T>(Expression<Func<T, object>> expresstion)
+        private static PropertyInfo GetProperty<T>(Expression<Func<T, object>> expression)
         {
-            if (expresstion.Body is UnaryExpression)
+            if (expression.Body is UnaryExpression)
             {
-                if ((expresstion.Body as UnaryExpression).Operand is MemberExpression)
+                if ((expression.Body as UnaryExpression).Operand is MemberExpression)
                 {
-                    return ((expresstion.Body as UnaryExpression).Operand as MemberExpression).Member as PropertyInfo;
+                    return ((expression.Body as UnaryExpression).Operand as MemberExpression).Member as PropertyInfo;
                 }
             }
 
-            if ((expresstion.Body is MemberExpression))
+            if ((expression.Body is MemberExpression))
             {
-                return (expresstion.Body as MemberExpression).Member as PropertyInfo;
+                return (expression.Body as MemberExpression).Member as PropertyInfo;
             }
             return null;
         }
